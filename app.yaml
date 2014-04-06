@@ -27,6 +27,15 @@ handlers:
 - url: /updateuser.py
   script: updateuser.py
 
+- url: /verifyuser.py
+  script: verifyuser.py
+
+- url: /getcollegeinfo.py
+  script: getcollegeinfo.py
+
+- url: /updatecollegeinfo.py
+  script: updatecollegeinfo.py
+
 - url: .*
   script: main.py
 

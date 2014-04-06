@@ -31,7 +31,7 @@ class AddUser(webapp.RequestHandler):
 				self.response.write({"response":"success"})
 		else:
 			self.response.write({"response":"invalid parameters", 
-				"debug":"username:"+username+"password:"+password+"email:"+email+"college:"+college})
+				"debug":str("username:"+username+"password:"+password+"email:"+email+"college:"+college)})
 
 def main():
 	application = webapp.WSGIApplication([("/adduser.py", AddUser)], debug=True)
