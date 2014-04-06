@@ -21,6 +21,12 @@ handlers:
 - url: /postgamemove.py
   script: postgamemove.py
 
+- url: /adduser.py
+  script: adduser.py
+
+- url: /updateuser.py
+  script: updateuser.py
+
 - url: .*
   script: main.py
 

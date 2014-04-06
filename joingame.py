@@ -36,11 +36,16 @@ class JoinGame(webapp.RequestHandler):
 				if len(college.defenders) > 0:
 					defender_index = random.randint(0, len(college.defenders)-1)
 					opponent = college.defenders[defender_index]
-					college.put()
-					#make a game
-					game = GameDatabase(defender=opponent, attacker=username)
-					game.put()
-					self.response.write({'p2_username':opponent})
+					#make a game ONLY if game doesnt already exist with that username
+					q_ingame = db.GqlQuery("SELECT * FROM GameDatabase " + "WHERE attacker=:1", username)
+					game = q_ingame.get()
+					if (game == None):
+						game = GameDatabase(defender=opponent, attacker=username)
+						game.put()
+						self.response.write({'p2_username':opponent})
+					else:
+						self.response.write({'response': 'game already exists'})
+						return
 				else:
 					self.response.write({'p2_username': 'pve'})
 

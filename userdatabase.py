@@ -6,4 +6,7 @@ class UserDatabase(db.Model):
 	email		= db.StringProperty()
 	college		= db.StringProperty()
 	location	= db.StringProperty()
-	stats		= db.StringProperty()#change to have wins, losses, points as Integers
+	wins		= db.IntegerProperty()
+	losses		= db.IntegerProperty()
+	points		= db.IntegerProperty()
+	#change to have wins, losses, points as Integers

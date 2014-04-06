@@ -3,15 +3,15 @@ import json
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 
-class Test(webapp.RequestHandler):
+class UpdateLocation(webapp.RequestHandler):
 
 	def get(self):
-		self.test()
+		self.updateLocation()
 
 	def post(self):
-		self.test()
+		self.updateLocation()
 
-	def test(self):
+	def updateLocation(self):
 		self.response.headers["Content-Type"] = "application/json"
 			
 
@@ -22,7 +22,7 @@ class Test(webapp.RequestHandler):
 		)
 
 def main():
-	application = webapp.WSGIApplication([("/test.py", Test)], debug=True)
+	application = webapp.WSGIApplication([("/updatelocation.py", UpdateLocation)], debug=True)
 	util.run_wsgi_app(application)
 
 if __name__ == "__main__":

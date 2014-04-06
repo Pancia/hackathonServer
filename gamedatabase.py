@@ -5,3 +5,4 @@ class GameDatabase(db.Model):
 	attacker		= db.StringProperty()
 	defender_move	= db.StringProperty()
 	attacker_move	= db.StringProperty()
+	should_reset	= db.BooleanProperty(False)
