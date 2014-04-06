@@ -16,40 +16,40 @@ class UpdateUser(webapp.RequestHandler):
 
 	def updateUser(self):
 		self.response.headers["Content-Type"] = "application/json"
-		username 	= self.request.get('username')
-		#password 	= self.request.get('password')
-		#email 		= self.request.get('email')
-		#college 	= self.request.get('college')
-		location 	= self.request.get('location')
-		#wins		= self.request.get('wins')
-		#losses		= self.request.get('losses')
-		#points		= self.request.get('points')
+		username 	= self.request.get("username")
+		#password 	= self.request.get("password")
+		#email 		= self.request.get("email")
+		#college 	= self.request.get("college")
+		location 	= self.request.get("location")
+		#wins		= self.request.get("wins")
+		#losses		= self.request.get("losses")
+		#points		= self.request.get("points")
 
-		if username == '':
-			self.response.write({'response': 'user name was null!'})
+		if username == "":
+			self.response.write({"response": "user name was null!"})
 			return
 		else:
 			q = db.GqlQuery("SELECT * FROM UserDatabase " + "WHERE username=:1", username)
 			if (q.get() == None):
-				self.response.write({'response': 'user not found!'})
+				self.response.write({"response": "user not found!"})
 				return
 			else:
 				user = q.get()
-				#if password != '':
+				#if password != "":
 				#	#blah
-				#if email != '':
+				#if email != "":
 				#	#blah
-				#if college != '':
+				#if college != "":
 				#	#blah
-				if location != '':
+				if location != "":
 					user.location = location
 					user.put()
-					self.response.write({'response':'success'})
-				#if wins != '':
+					self.response.write({"response":"success"})
+				#if wins != "":
 				#	#blah
-				#if losses != '':
+				#if losses != "":
 				#	#blah
-				#if points != '':
+				#if points != "":
 				#	#blah
 
 

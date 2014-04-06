@@ -16,19 +16,22 @@ class AddUser(webapp.RequestHandler):
 
 	def addUser(self):
 		self.response.headers["Content-Type"] = "application/json"
-		username = self.request.get('username')
-		password = self.request.get('password')
-		email = self.request.get('email')
-		college = self.request.get('college')
-		if username != '' and password != '' and email != '' and college != '':
+		username = self.request.get("username")
+		password = self.request.get("password")
+		email = self.request.get("email")
+		college = self.request.get("college")
+		if username != "" and password != "" and email != "" and college != "":
 			q = db.GqlQuery("SELECT * FROM UserDatabase " + "WHERE username=:1", username)
 			if (q.get() != None):
-				self.response.write({'response': 'user already exists!'})
+				self.response.write({"response": "user already exists!"})
 				return
 			else:
 				ud = UserDatabase(username=username, password=password, email=email, college=college)#set stats to 0
 				ud.put()
-				self.response.write({'response':'success'})
+				self.response.write({"response":"success"})
+		else:
+			self.response.write({"response":"invalid parameters", 
+				"debug":"username:"+username+"password:"+password+"email:"+email+"college:"+college})
 
 def main():
 	application = webapp.WSGIApplication([("/adduser.py", AddUser)], debug=True)

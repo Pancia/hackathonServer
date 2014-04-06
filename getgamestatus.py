@@ -16,34 +16,34 @@ class GetGameStatus(webapp.RequestHandler):
 
 	def getGameStatus(self):
 		self.response.headers["Content-Type"] = "application/json"
-		username = self.request.get('username')
-		gamemode = self.request.get('gamemode')
+		username = self.request.get("username")
+		gamemode = self.request.get("gamemode")
 
-		if username != '' and gamemode != '':
+		if username != "" and gamemode != "":
 			q_ingame = db.GqlQuery("SELECT * FROM GameDatabase " + "WHERE "+gamemode+"=:1", username)
 			game = q_ingame.get()
 			if (game == None):
-				self.response.write({'response': 'failed to find game'})
+				self.response.write({"response": "failed to find game"})
 				return
 			if game.defender_move == None and game.attacker_move != None:
-				self.response.write({'response': 'try again'})#game moves not both submitted
+				self.response.write({"response": "try again"})#game moves not both submitted
 				return
 			if game.defender_move != None and game.attacker_move == None:
-				self.response.write({'response': 'try again'})#game moves not both submitted
+				self.response.write({"response": "try again"})#game moves not both submitted
 				return
 
 			if game.should_reset == False or game.should_reset == None:
 				game.should_reset = True
 				if gamemode == "attacker":
-					self.response.write({'gamemove':game.defender_move})
+					self.response.write({"gamemove":game.defender_move})
 				elif gamemode == "defender":
-					self.response.write({'gamemove':game.attacker_move})
+					self.response.write({"gamemove":game.attacker_move})
 				game.put()
 			elif self.isGameOver(game):
 				if gamemode == "attacker":
-					self.response.write({'gamemove':game.defender_move})
+					self.response.write({"gamemove":game.defender_move})
 				elif gamemode == "defender":
-					self.response.write({'gamemove':game.attacker_move})
+					self.response.write({"gamemove":game.attacker_move})
 				db.delete(game)
 
 
