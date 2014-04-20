@@ -33,21 +33,21 @@ class Init(webapp.RequestHandler):
 		self.response.headers["Content-Type"] = "text/plain"
 		self.response.write("INITIALIZING")
 
-		ud1 = UserDatabase(username="anthony", location="oakes")
+		ud1 = UserDatabase(username="anthony", location="Oakes")
 		ud1.put()
-		ud2 = UserDatabase(username="rachelle", location="oakes")
+		ud2 = UserDatabase(username="rachelle", location="Oakes")
 		ud2.put()
-		ud3 = UserDatabase(username="jordan", location="oakes")
+		ud3 = UserDatabase(username="jordan", location="Oakes")
 		ud3.put()
-		ud4 = UserDatabase(username="cameron", location="oakes")
+		ud4 = UserDatabase(username="cameron", location="Oakes")
 		ud4.put()
 
 		self.initColleges()
 
 	def initColleges(self):
-		oakes = CollegeDatabase(name="oakes", num_of_resources="500", defenders=[])
+		oakes = CollegeDatabase(name="Oakes", num_of_resources="500", defenders=[])
 		oakes.put()
-		eight = CollegeDatabase(name="eight", num_of_resources="500", defenders=[])
+		eight = CollegeDatabase(name="Eight", num_of_resources="500", defenders=[])
 		eight.put()
 
 def main():

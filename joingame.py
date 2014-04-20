@@ -29,8 +29,8 @@ class JoinGame(webapp.RequestHandler):
 				return
 			location = q_loc.get().location
 
-			q_def = db.GqlQuery("SELECT * FROM CollegeDatabase " + "WHERE name=:1", location)
-			college = q_def.get()
+			q_coll = db.GqlQuery("SELECT * FROM CollegeDatabase " + "WHERE name=:1", location)
+			college = q_coll.get()
 
 			if gamemode == "attacker":
 				if len(college.defenders) > 0:
@@ -42,7 +42,7 @@ class JoinGame(webapp.RequestHandler):
 					if (game == None):
 						game = GameDatabase(defender=opponent, attacker=username)
 						game.put()
-						self.response.write({"p2_username":opponent})
+						self.response.write({"p2_username":str(opponent)})
 					else:
 						self.response.write({"response": "game already exists"})
 						return
@@ -60,7 +60,7 @@ class JoinGame(webapp.RequestHandler):
 					if username == game.defender:
 						college.defenders.remove(username)
 						college.put()
-						self.response.write({"p2_username":game.attacker})
+						self.response.write({"p2_username":str(game.attacker)})
 					else:
 						self.response.write({"response": "try again"})
 				else:

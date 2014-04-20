@@ -34,16 +34,16 @@ class GetGameStatus(webapp.RequestHandler):
 
 			if game.should_reset == False or game.should_reset == None:
 				game.should_reset = True
-				if gamemode == "attacker":
-					self.response.write({"gamemove":game.defender_move})
-				elif gamemode == "defender":
-					self.response.write({"gamemove":game.attacker_move})
 				game.put()
+				if gamemode == "attacker":
+					self.response.write({"gamemove":str(game.defender_move)})
+				elif gamemode == "defender":
+					self.response.write({"gamemove":str(game.attacker_move)})
 			elif self.isGameOver(game):
 				if gamemode == "attacker":
-					self.response.write({"gamemove":game.defender_move})
+					self.response.write({"gamemove":str(game.defender_move)})
 				elif gamemode == "defender":
-					self.response.write({"gamemove":game.attacker_move})
+					self.response.write({"gamemove":str(game.attacker_move)})
 				db.delete(game)
 
 

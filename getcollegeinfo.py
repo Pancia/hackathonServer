@@ -25,7 +25,7 @@ class GetCollegeInfo(webapp.RequestHandler):
 				self.response.write({"response": "failed to find college"})
 				return
 			else:
-				self.response.write({"defender_count":len(college.defenders), "resources":college.num_of_resources})
+				self.response.write({"defender_count":len(college.defenders), "resources":str(college.num_of_resources)})
 		else:
 			self.response.write({"response":"invalid parameters", 
 				"debug":"college:"+college})
