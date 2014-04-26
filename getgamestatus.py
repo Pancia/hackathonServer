@@ -3,6 +3,7 @@ import json
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 from google.appengine.ext import db
+import logging
 
 from gamedatabase import GameDatabase
 
@@ -16,8 +17,9 @@ class GetGameStatus(webapp.RequestHandler):
 
 	def getGameStatus(self):
 		self.response.headers["Content-Type"] = "application/json"
-		username = self.request.get("username")
-		gamemode = self.request.get("gamemode")
+		jayson = json.loads(self.request.body)
+		username = jayson.get("username")
+		gamemode = jayson.get("gamemode")
 
 		if username != "" and gamemode != "":
 			q_ingame = db.GqlQuery("SELECT * FROM GameDatabase " + "WHERE "+gamemode+"=:1", username)
@@ -26,9 +28,11 @@ class GetGameStatus(webapp.RequestHandler):
 				self.response.write({"response": "failed to find game"})
 				return
 			if game.defender_move == None and game.attacker_move != None:
+				logging.info("Both game moves not submitted")
 				self.response.write({"response": "try again"})#game moves not both submitted
 				return
 			if game.defender_move != None and game.attacker_move == None:
+				logging.info("Both game moves not submitted")
 				self.response.write({"response": "try again"})#game moves not both submitted
 				return
 
@@ -39,7 +43,7 @@ class GetGameStatus(webapp.RequestHandler):
 					self.response.write({"gamemove":str(game.defender_move)})
 				elif gamemode == "defender":
 					self.response.write({"gamemove":str(game.attacker_move)})
-			elif self.isGameOver(game):
+			else:
 				if gamemode == "attacker":
 					self.response.write({"gamemove":str(game.defender_move)})
 				elif gamemode == "defender":

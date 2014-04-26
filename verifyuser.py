@@ -4,6 +4,8 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 from google.appengine.ext import db
 
+import json
+
 from userdatabase import UserDatabase
 
 class VerifyUser(webapp.RequestHandler):
@@ -16,8 +18,9 @@ class VerifyUser(webapp.RequestHandler):
 
 	def verifyUser(self):
 		self.response.headers["Content-Type"] = "application/json"
-		username = self.request.get("username")
-		password = self.request.get("password")
+		jayson = json.loads(self.request.body)
+		username = jayson.get("username")
+		password = jayson.get("password")
 		if username != "" and password != "":
 			q = db.GqlQuery("SELECT * FROM UserDatabase " + "WHERE username=:1", username)
 			user = q.get()

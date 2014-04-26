@@ -16,10 +16,11 @@ class AddUser(webapp.RequestHandler):
 
 	def addUser(self):
 		self.response.headers["Content-Type"] = "application/json"
-		username = self.request.get("username")
-		password = self.request.get("password")
-		email = self.request.get("email")
-		college = self.request.get("college")
+		jayson = json.loads(self.request.body)
+		username = jayson.get("username")
+		password = jayson.get("password")
+		email = jayson.get("email")
+		college = jayson.get("college")
 		if username != "" and password != "" and email != "" and college != "":
 			q = db.GqlQuery("SELECT * FROM UserDatabase " + "WHERE username=:1", username)
 			if (q.get() != None):

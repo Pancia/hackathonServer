@@ -4,6 +4,7 @@ import random
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 from google.appengine.ext import db
+import logging
 
 from userdatabase import UserDatabase
 from gamedatabase import GameDatabase
@@ -19,10 +20,10 @@ class JoinGame(webapp.RequestHandler):
 
 	def joinGame(self):
 		self.response.headers["Content-Type"] = "application/json"
-		if self.request.get("username") != "" and self.request.get("gamemode") != "":
-			username = self.request.get("username")
-			gamemode = self.request.get("gamemode")
-
+		jayson = json.loads(self.request.body)
+		username = jayson.get("username")
+		gamemode = jayson.get("gamemode")
+		if username != "" and gamemode != "":
 			q_loc = db.GqlQuery("SELECT * FROM UserDatabase " + "WHERE username=:1", username)
 			if (q_loc.get() == None):
 				self.response.write({"response": "UserDatabase was null!"})
@@ -36,7 +37,6 @@ class JoinGame(webapp.RequestHandler):
 				if len(college.defenders) > 0:
 					defender_index = random.randint(0, len(college.defenders)-1)
 					opponent = college.defenders[defender_index]
-					#make a game ONLY if game doesnt already exist with that username
 					q_ingame = db.GqlQuery("SELECT * FROM GameDatabase " + "WHERE attacker=:1", username)
 					game = q_ingame.get()
 					if (game == None):
@@ -54,6 +54,7 @@ class JoinGame(webapp.RequestHandler):
 					q_ingame = db.GqlQuery("SELECT * FROM GameDatabase " + "WHERE defender=:1", username)
 					game = q_ingame.get()
 					if (game == None):
+						logging.error("game with user: "+str(username)+" not found")
 						self.response.write({"response": "try again"})
 						return
 

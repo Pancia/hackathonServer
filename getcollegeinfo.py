@@ -16,7 +16,8 @@ class GetCollegeInfo(webapp.RequestHandler):
 
 	def getCollegeInfo(self):
 		self.response.headers["Content-Type"] = "application/json"
-		college = self.request.get("college")
+		jayson = json.loads(self.request.body)
+		college = jayson.get("college")
 
 		if college != "":
 			q = db.GqlQuery("SELECT * FROM CollegeDatabase " + "WHERE name=:1", college)

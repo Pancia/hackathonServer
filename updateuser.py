@@ -16,6 +16,8 @@ class UpdateUser(webapp.RequestHandler):
 
 	def updateUser(self):
 		self.response.headers["Content-Type"] = "application/json"
+		#jayson = json.loads(self.request.body)
+		
 		username 	= self.request.get("username")
 		#password 	= self.request.get("password")
 		#email 		= self.request.get("email")

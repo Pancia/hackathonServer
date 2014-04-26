@@ -16,9 +16,10 @@ class PostGameMove(webapp.RequestHandler):
 
 	def postGameMove(self):
 		self.response.headers["Content-Type"] = "application/json"
-		username = self.request.get("username")
-		move = self.request.get("move")
-		gamemode = self.request.get("gamemode")
+		jayson = json.loads(self.request.body)
+		username = jayson.get("username")
+		move = jayson.get("move")
+		gamemode = jayson.get("gamemode")
 		if username != "" and move != "" and gamemode != "":
 			#find game with username
 			q_ingame = db.GqlQuery("SELECT * FROM GameDatabase " + "WHERE "+gamemode+"=:1", username)
