@@ -25,15 +25,15 @@ class VerifyUser(webapp.RequestHandler):
 			q = db.GqlQuery("SELECT * FROM UserDatabase " + "WHERE username=:1", username)
 			user = q.get()
 			if user == None:
-				self.response.write({"response": "no such user"})
+				self.response.write({"response": {"message":"no such user", "status":-1}})
 				return
 			elif user.password == password:
-				self.response.write({"response":"success", "college":str(user.college)})
+				self.response.write({"response":{"message":"success", "college":str(user.college), "status":0}})
 			else:
-				self.response.write({"response":"failed"})
+				self.response.write({"response":{"message":"failed", "status":2}})
 		else:
-			self.response.write({"response":"invalid parameters", 
-				"debug":"username:"+username+"password:"+password})
+			self.response.write({"response":{"message":"invalid parameters", "status":-2,
+				"debug":{"username":username, "password":password}}})
 
 def main():
 	application = webapp.WSGIApplication([("/verifyuser.py", VerifyUser)], debug=True)

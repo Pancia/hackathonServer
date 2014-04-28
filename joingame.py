@@ -26,7 +26,7 @@ class JoinGame(webapp.RequestHandler):
 		if username != "" and gamemode != "":
 			q_loc = db.GqlQuery("SELECT * FROM UserDatabase " + "WHERE username=:1", username)
 			if (q_loc.get() == None):
-				self.response.write({"response": "UserDatabase was null!"})
+				self.response.write({"response": {"message":"UserDatabase was null!", "status":-1}})
 				return
 			location = q_loc.get().location
 
@@ -42,32 +42,35 @@ class JoinGame(webapp.RequestHandler):
 					if (game == None):
 						game = GameDatabase(defender=opponent, attacker=username)
 						game.put()
-						self.response.write({"p2_username":str(opponent)})
+						self.response.write({"response":{"p2_username":str(opponent), "status":0}})
 					else:
-						self.response.write({"response": "game already exists"})
+						self.response.write({"response": {"message":"game already exists", "status":2}})
 						return
 				else:
-					self.response.write({"p2_username": "pve"})
+					self.response.write({"response":{"p2_username": "pve", "status":0}})
 
 			elif gamemode == "defender":
 				if username in college.defenders:
 					q_ingame = db.GqlQuery("SELECT * FROM GameDatabase " + "WHERE defender=:1", username)
 					game = q_ingame.get()
 					if (game == None):
-						logging.error("game with user: "+str(username)+" not found")
-						self.response.write({"response": "try again"})
+						logging.warning("game with user("+str(username)+")not found")
+						self.response.write({"response": {"message":"try again", "status":1}})
 						return
 
 					if username == game.defender:
 						college.defenders.remove(username)
 						college.put()
-						self.response.write({"p2_username":str(game.attacker)})
+						self.response.write({"response":{"p2_username":str(game.attacker), "status":0}})
 					else:
-						self.response.write({"response": "try again"})
+						self.response.write({"response": {"message":"try again", "status":1}})
 				else:
 					college.defenders.append(username)
 					college.put()
-					self.response.write({"response":"added to game"})
+					self.response.write({"response": {"message":"added to game", "status":1}})
+		else:
+			self.response.write({"response":{"message":"invalid parameters", "status":-2, 
+				"debug":{"username":username, "gamemode":gamemode}}})
 
 def main():
 	application = webapp.WSGIApplication([("/joingame.py", JoinGame)], debug=True)

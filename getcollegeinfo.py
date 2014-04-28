@@ -23,13 +23,13 @@ class GetCollegeInfo(webapp.RequestHandler):
 			q = db.GqlQuery("SELECT * FROM CollegeDatabase " + "WHERE name=:1", college)
 			college = q.get()
 			if college == None:
-				self.response.write({"response": "failed to find college"})
-				return
+				self.response.write({"response": {"message":"failed to find college", "status":-1}})
 			else:
-				self.response.write({"defender_count":len(college.defenders), "resources":str(college.num_of_resources)})
+				self.response.write({"response": {"status":0,"defender_count":len(college.defenders), 
+												"resources":str(college.num_of_resources)}})
 		else:
-			self.response.write({"response":"invalid parameters", 
-				"debug":"college:"+college})
+			self.response.write({"response":{"message":"invalid parameters", "status":-2, 
+				"debug":{"college"+college}}})
 
 def main():
 	application = webapp.WSGIApplication([("/getcollegeinfo.py", GetCollegeInfo)], debug=True)

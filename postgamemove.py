@@ -25,7 +25,7 @@ class PostGameMove(webapp.RequestHandler):
 			q_ingame = db.GqlQuery("SELECT * FROM GameDatabase " + "WHERE "+gamemode+"=:1", username)
 			game = q_ingame.get()
 			if (game == None):
-				self.response.write({"response": "failed to find game"})
+				self.response.write({"response": {"message":"failed to find game", "status":2}})
 				return
 			
 			#if move already exists "ignore" it
@@ -34,7 +34,10 @@ class PostGameMove(webapp.RequestHandler):
 			elif gamemode == "defender" and game.defender_move == None:
 				game.defender_move = move
 			game.put()
-			self.response.write({"response":"success"})
+			self.response.write({"response": {"message":"success", "status":0}})
+		else:
+			self.response.write({"response":{"message":"invalid parameters", "status":-2, 
+				"debug":{"username":username, "move":move, "gamemode":gamemode}}})
 
 def main():
 	application = webapp.WSGIApplication([("/postgamemove.py", PostGameMove)], debug=True)

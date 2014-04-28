@@ -14,7 +14,6 @@ class UpdateLocation(webapp.RequestHandler):
 	def updateLocation(self):
 		self.response.headers["Content-Type"] = "application/json"
 			
-
 		self.response.write(
 			json.dumps(
 				{"success":0, "response":"#TEST - Hello World!"}

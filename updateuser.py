@@ -27,13 +27,10 @@ class UpdateUser(webapp.RequestHandler):
 		#losses		= self.request.get("losses")
 		#points		= self.request.get("points")
 
-		if username == "":
-			self.response.write({"response": "user name was null!"})
-			return
-		else:
+		if username != "":
 			q = db.GqlQuery("SELECT * FROM UserDatabase " + "WHERE username=:1", username)
 			if (q.get() == None):
-				self.response.write({"response": "user not found!"})
+				self.response.write({"response": {"message":"user not found!", "status":-1}})
 				return
 			else:
 				user = q.get()
@@ -46,14 +43,16 @@ class UpdateUser(webapp.RequestHandler):
 				if location != "":
 					user.location = location
 					user.put()
-					self.response.write({"response":"success"})
+					self.response.write({"response":{"message":"success", "status":0}})
 				#if wins != "":
 				#	#blah
 				#if losses != "":
 				#	#blah
 				#if points != "":
 				#	#blah
-
+		else:
+			self.response.write({"response":{"message":"invalid parameters", "status":-2,
+				"debug":{"username":username, "location":location}}})
 
 def main():
 	application = webapp.WSGIApplication([("/updateuser.py", UpdateUser)], debug=True)
